@@ -66,10 +66,11 @@ def run_code(request: RunRequest):
     endpoint = f"{os.getenv('JUDGE0_URL')}/submissions/?base64_encoded=true&wait=true"
     payload = {
         "language_id": 44,
-        "source_code": b64d(request.code),
-        "stdin": b64d(request.stdin)
+        "source_code": request.code,
+        "stdin": b64e(request.stdin.encode())
     }
     resp = requests.post(endpoint, json=payload)
+    print(resp.json())
     stdout = b64d(resp.json()["stdout"])
     exec_time = float(resp.json()["time"])
     return {"stdout": stdout, "exec_time": exec_time}
