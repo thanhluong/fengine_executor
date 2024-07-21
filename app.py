@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
-import os, base64, requests
+import os, requests
 
 from utils import rand_filename, b64e, b64d
 
