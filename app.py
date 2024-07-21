@@ -63,7 +63,7 @@ def run_code(request: RunRequest):
     :param request: binary code in base64 form and stdin in base64 form
     :return: stdout after execution
     """
-    endpoint = f"{os.getenv("JUDGE0_URL")}/submissions/?base64_encoded=true&wait=true"
+    endpoint = f"{os.getenv('JUDGE0_URL')}/submissions/?base64_encoded=true&wait=true"
     payload = {
         "language_id": 44,
         "source_code": b64d(request.code),
