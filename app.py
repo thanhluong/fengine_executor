@@ -57,7 +57,7 @@ def compile_and_get_b64(request: CompileRequest):
 
         status = os.system(f"{os.getenv('COMPILER_CPP')} -DONLINE_JUDGE -O2 -std=c++17 -o {output_path} {src_path}")
         if status != 0:
-            return {"error": "compilation error"}
+            return {"error": "compilation error", "src_as_b64": ""}
 
         fd_out = open(output_path, "rb")
         content_binary = fd_out.read()
@@ -66,7 +66,7 @@ def compile_and_get_b64(request: CompileRequest):
 
         os.system(f"rm {src_path} {output_path}")
 
-        return {"src_as_b64": content_b64}
+        return {"error": "no", "src_as_b64": content_b64}
 
     return {"b64": request.code, "lang": request.language, "compiler": os.getenv("COMPILER_CPP")}
 
@@ -87,7 +87,7 @@ def run_code(request: RunRequest):
     }
     resp = requests.post(endpoint, json=payload).json()
     if resp["status"]["id"] != 3:
-        return {"status": resp["status"]["description"]}
+        return {"status": resp["status"]["description"], "stdout": "", "exec_time": 0}
     stdout = b64d(resp["stdout"])
     exec_time = float(resp["time"])
     return {"status": resp["status"]["description"], "stdout": stdout, "exec_time": exec_time}
