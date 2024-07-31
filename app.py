@@ -67,9 +67,13 @@ def run_code(request: RunRequest):
     payload = {
         "language_id": 44,
         "source_code": request.code,
-        "stdin": b64e(request.stdin.encode())
+        "stdin": b64e(request.stdin.encode()),
+        "cpu_time_limit": 1,
+        "wall_time_limit": 10
     }
-    resp = requests.post(endpoint, json=payload)
-    stdout = b64d(resp.json()["stdout"])
-    exec_time = float(resp.json()["time"])
-    return {"stdout": stdout, "exec_time": exec_time}
+    resp = requests.post(endpoint, json=payload).json()
+    if resp["status"]["id"] != 3:
+        return {"status": resp["status"]["description"]}
+    stdout = b64d(resp["stdout"])
+    exec_time = float(resp["time"])
+    return {"status": resp["status"]["description"], "stdout": stdout, "exec_time": exec_time}
