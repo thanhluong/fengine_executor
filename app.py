@@ -86,6 +86,8 @@ def run_code(request: RunRequest):
         "wall_time_limit": 10
     }
     resp = requests.post(endpoint, json=payload).json()
+    if "status" not in resp:
+        return {"status": "judge error", "stdout": "", "exec_time": 0}
     if resp["status"]["id"] != 3:
         return {"status": resp["status"]["description"], "stdout": "", "exec_time": 0}
     stdout = b64d(resp["stdout"])
