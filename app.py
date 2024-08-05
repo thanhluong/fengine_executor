@@ -75,7 +75,7 @@ def compile_and_get_b64(request: CompileRequest):
         fd_src.write(request.code)
         fd_src.close()
 
-        status = os.system(f"./venv/bin/pyinstaller {src_path}")
+        status = os.system(f"./venv/bin/pyinstaller --onefile {src_path}")
         if status != 0:
             return {"error": "compilation error", "src_as_b64": ""}
 
