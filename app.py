@@ -80,8 +80,9 @@ def run_code(request: RunRequest):
     :return: stdout after execution
     """
     endpoint = f"{os.getenv('JUDGE0_URL')}/submissions/?base64_encoded=true&wait=true"
+    language_id = 71 if request.language == "py" else 44
     payload = {
-        "language_id": 44,
+        "language_id": language_id,
         "source_code": request.code,
         "stdin": b64e(request.stdin.encode()),
         "cpu_time_limit": 1,
