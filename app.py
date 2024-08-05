@@ -85,8 +85,7 @@ def compile_and_get_b64(request: CompileRequest):
         fd_out.close()
         content_b64 = b64e(content_binary)
 
-        os.system(f"rm -rf build")
-        os.system(f"rm -rf dist")
+        os.system(f"rm -rf build dist")
         os.system(f"rm {prefix}.spec {src_path}")
 
         return {"error": "no", "src_as_b64": content_b64}
