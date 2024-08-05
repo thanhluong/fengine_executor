@@ -68,7 +68,7 @@ def compile_and_get_b64(request: CompileRequest):
 
         return {"error": "no", "src_as_b64": content_b64}
     elif request.language == "py":
-        return {"error": "no", "src_as_b64": request.code}
+        return {"error": "no", "src_as_b64": b64e(request.code)}
 
     return {"b64": request.code, "lang": request.language, "compiler": os.getenv("COMPILER_CPP")}
 
