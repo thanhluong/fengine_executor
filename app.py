@@ -79,7 +79,7 @@ def compile_and_get_b64(request: CompileRequest):
         if status != 0:
             return {"error": "compilation error", "src_as_b64": ""}
 
-        output_path = f"dist/{prefix}/{prefix}"
+        output_path = f"dist/{prefix}"
         fd_out = open(output_path, "rb")
         content_binary = fd_out.read()
         fd_out.close()
