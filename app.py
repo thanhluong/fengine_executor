@@ -67,6 +67,29 @@ def compile_and_get_b64(request: CompileRequest):
         os.system(f"rm {src_path} {output_path}")
 
         return {"error": "no", "src_as_b64": content_b64}
+    elif request.language == "py":
+        prefix = rand_filename(length=12)
+        src_path = f"{prefix}.py"
+
+        fd_src = open(src_path, "w")
+        fd_src.write(request.code)
+        fd_src.close()
+
+        status = os.system(f"./venv/bin/pyinstaller {src_path}")
+        if status != 0:
+            return {"error": "compilation error", "src_as_b64": ""}
+
+        output_path = f"dist/{prefix}/{prefix}"
+        fd_out = open(output_path, "rb")
+        content_binary = fd_out.read()
+        fd_out.close()
+        content_b64 = b64e(content_binary)
+
+        os.system(f"rm -rf build")
+        os.system(f"rm -rf dist")
+        os.system(f"rm {prefix}.spec {src_path}")
+
+        return {"error": "no", "src_as_b64": content_b64}
 
     return {"b64": request.code, "lang": request.language, "compiler": os.getenv("COMPILER_CPP")}
 
