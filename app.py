@@ -32,6 +32,7 @@ class CompileRequest(BaseModel):
 
 class RunRequest(BaseModel):
     code: str
+    language: str
     stdin: str
 
 
