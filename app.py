@@ -70,7 +70,27 @@ def compile_and_get_b64(request: CompileRequest):
         return {"error": "no", "src_as_b64": content_b64}
     elif request.language == "py":
         return {"error": "no", "src_as_b64": b64e(request.code.encode())}
+    elif request.language == "pascal":
+        prefix = rand_filename(length=12)
+        src_path = f"{prefix}.pas"
+        output_path = f"{prefix}.out"
 
+        fd_src = open(src_path, "w")
+        fd_src.write(request.code)
+        fd_src.close()
+
+        status = os.system(f"{os.getenv('COMPILER_PASCAL')} -O2 -o {output_path} {src_path}")
+        if status != 0:
+            return {"error": "compilation error", "src_as_b64": ""}
+
+        fd_out = open(output_path, "rb")
+        content_binary = fd_out.read()
+        fd_out.close()
+        content_b64 = b64e(content_binary)
+
+        os.system(f"rm {src_path} {output_path}")
+
+        return {"error": "no", "src_as_b64": content_b64}
     return {"b64": request.code, "lang": request.language, "compiler": os.getenv("COMPILER_CPP")}
 
 
@@ -81,7 +101,13 @@ def run_code(request: RunRequest):
     :return: stdout after execution
     """
     endpoint = f"{os.getenv('JUDGE0_URL')}/submissions/?base64_encoded=true&wait=true"
-    language_id = 71 if request.language == "py" else 44
+    
+    language_id_map = {
+        "py": 71,   # Python
+        "cpp": 44,  # C++
+        "pascal": 67  # Pascal
+    }
+    language_id = language_id_map.get(request.language)
     payload = {
         "language_id": language_id,
         "source_code": request.code,
