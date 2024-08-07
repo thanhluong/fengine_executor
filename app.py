@@ -94,6 +94,9 @@ def run_code(request: RunRequest):
         return {"status": "judge error", "stdout": "", "exec_time": 0}
     if resp["status"]["id"] != 3:
         return {"status": resp["status"]["description"], "stdout": "", "exec_time": 0}
-    stdout = b64d(resp["stdout"])
+    output_raw = resp["stdout"]
+    if output_raw is None:
+        output_raw = ""
+    stdout = b64d(output_raw)
     exec_time = float(resp["time"])
     return {"status": resp["status"]["description"], "stdout": stdout, "exec_time": exec_time}
