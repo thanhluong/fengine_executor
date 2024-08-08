@@ -56,7 +56,7 @@ def compile_and_get_b64(request: CompileRequest):
         fd_src.write(request.code)
         fd_src.close()
 
-        status = os.system(f"{os.getenv('COMPILER_CPP')} -DONLINE_JUDGE -O2 -std=c++17 -o {output_path} {src_path}")
+        status = os.system(f"{os.getenv('COMPILER_CPP')} -DONLINE_JUDGE -Wall -lm -fmax-errors=5 -march=native -s -O2 -std=c++17 -o {output_path} {src_path}")
         if status != 0:
             return {"error": "compilation error", "src_as_b64": ""}
 
