@@ -87,7 +87,8 @@ def run_code(request: RunRequest):
         "source_code": request.code,
         "stdin": b64e(request.stdin.encode()),
         "cpu_time_limit": 2,
-        "wall_time_limit": 10
+        "wall_time_limit": 10,
+        "memory_limit": 512 * 1024
     }
     resp = requests.post(endpoint, json=payload).json()
     if "status" not in resp:
