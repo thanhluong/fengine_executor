@@ -86,7 +86,7 @@ def run_code(request: RunRequest):
         "language_id": language_id,
         "source_code": request.code,
         "stdin": b64e(request.stdin.encode()),
-        "cpu_time_limit": 1,
+        "cpu_time_limit": 2,
         "wall_time_limit": 10
     }
     resp = requests.post(endpoint, json=payload).json()
