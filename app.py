@@ -36,12 +36,12 @@ class RunRequest(BaseModel):
     stdin: str
 
 
-@app.get("/")
+@app.get("/api")
 def read_root():
     return {"Hello": "World"}
 
 
-@app.post("/compile_and_get_b64")
+@app.post("/api/compile_and_get_b64")
 def compile_and_get_b64(request: CompileRequest):
     """
     :param request: raw source code and programming language
@@ -74,7 +74,7 @@ def compile_and_get_b64(request: CompileRequest):
     return {"b64": request.code, "lang": request.language, "compiler": os.getenv("COMPILER_CPP")}
 
 
-@app.post("/run_code")
+@app.post("/api/run_code")
 def run_code(request: RunRequest):
     """
     :param request: binary code in base64 form and stdin in base64 form
